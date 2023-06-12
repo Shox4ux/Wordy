@@ -44,6 +44,13 @@ dependencies:
   flutter_speed_dial: ^6.2.0
   smooth_page_indicator: ^1.0.0+2
   google_fonts: ^4.0.5
+  flutter_native_splash: ^2.2.16
+
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+  color: "#DA8020"
 
 dev_dependencies:
   flutter_test:

@@ -259,9 +259,12 @@ class _MainScreenState extends State<MainScreen> {
                     style: AppTextStyles.wordText,
                   ),
                   SizedBox(width: 20.w),
-                  Text(
-                    "[ ${wordModel.transcription!} ]",
-                    style: AppTextStyles.transcriptText,
+                  Expanded(
+                    child: Text(
+                      "[ ${wordModel.transcription!} ]",
+                      style: AppTextStyles.transcriptText,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
               ),
@@ -313,18 +316,24 @@ class _MainScreenState extends State<MainScreen> {
   Container _unSelectedWordItem(WordModel wordModel) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 40.w),
-      child: Row(
-        children: [
-          Text(
-            wordModel.word!.cupitalizeFirstLetter(),
-            style: AppTextStyles.wordText,
-          ),
-          SizedBox(width: 20.w),
-          Text(
-            "[ ${wordModel.transcription!} ]",
-            style: AppTextStyles.transcriptText,
-          ),
-        ],
+      child: Expanded(
+        child: Row(
+          children: [
+            Text(
+              wordModel.word!.cupitalizeFirstLetter(),
+              style: AppTextStyles.wordText,
+              overflow: TextOverflow.ellipsis,
+            ),
+            SizedBox(width: 20.w),
+            Expanded(
+              child: Text(
+                "[ ${wordModel.transcription!} ]",
+                style: AppTextStyles.transcriptText,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

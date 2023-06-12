@@ -356,7 +356,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
                   }
                   return ElevatedButton(
                     onPressed: () {
-                      final wordId = getRandomString(10);
+                      final wordId = DateTime.now().toString();
                       context.read<WordCubit>().saveWord(WordModel(
                             id: wordId,
                             word: _wordController.text,

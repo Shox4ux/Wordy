@@ -82,6 +82,7 @@ class _QuizScreenState extends State<QuizScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               FloatingActionButton(
+                heroTag: "previous",
                 backgroundColor: AppColors.mainColor,
                 child: const Icon(Icons.arrow_back),
                 onPressed: () {
@@ -92,6 +93,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 },
               ),
               FloatingActionButton(
+                heroTag: "next",
                 backgroundColor: AppColors.mainColor,
                 child: const Icon(Icons.arrow_forward),
                 onPressed: () {
@@ -230,10 +232,4 @@ class _QuizScreenState extends State<QuizScreen> {
       ),
     );
   }
-
-  // Widget _pageItem(WordModel wordList) {
-  //   return TweenAnimationBuilder(tween: tween, duration: const Duration(seconds: 1), builder: (context, value, child) {
-
-  //   },)
-  // }
 }

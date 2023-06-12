@@ -5,12 +5,16 @@ import 'package:wordy_app/core/model/word_model.dart';
 import 'package:wordy_app/ui/add_edit_screen/add_edit_screen.dart';
 import 'package:wordy_app/ui/quiz_screen/quiz_screen.dart';
 import 'package:wordy_app/ui/res/functions/cupitalize_first_letter.dart';
+import 'package:wordy_app/ui/res/functions/sort_word_list_by_time.dart';
 import '../../core/cubit/word_cubit.dart';
 import '../res/constants/app_colors.dart';
 import '../res/constants/app_text_styles.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
+import '../res/functions/show_toast.dart';
+
 int? selectedWordIndex;
+List<WordModel> wordList = [];
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -23,11 +27,19 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: SpeedDial(
         backgroundColor: AppColors.mainColor,
-        animatedIcon: AnimatedIcons.menu_close,
+        icon: Icons.menu,
+        activeIcon: Icons.close,
         overlayColor: Colors.black,
-        overlayOpacity: 0.4,
+        overlayOpacity: 0.3,
+        spacing: 10.h,
+        spaceBetweenChildren: 20.h,
+        renderOverlay: true,
+        direction: SpeedDialDirection.up,
+        heroTag: "why caused",
+        animationCurve: Curves.easeInOut,
         children: [
           SpeedDialChild(
             child: const Icon(Icons.add),
@@ -45,12 +57,15 @@ class _MainScreenState extends State<MainScreen> {
             child: const Icon(Icons.quiz),
             label: "Take quiz",
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const QuizScreen(),
-                ),
-              );
+              wordList.isNotEmpty
+                  ? Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const QuizScreen(),
+                      ),
+                    )
+                  : showToast("Add words");
+              ;
             },
           )
         ],
@@ -78,8 +93,10 @@ class _MainScreenState extends State<MainScreen> {
                 );
               }
               if (state is OnWordsReceived) {
-                final wordList = state.wordList;
-                return _listPart(context, wordList);
+                wordList = state.wordList;
+
+                // final reflected = wordList;
+                return _listPart(context, sortWordsById(wordList));
               }
               return const Center(child: Text("Ups, something went wrong"));
             },
@@ -131,41 +148,6 @@ class _MainScreenState extends State<MainScreen> {
                         "It seems there is nothing\n   please add the word...",
                       ),
                     ),
-              // Positioned(
-              //   bottom: 30,
-              //   right: 20,
-              //   child: FloatingActionButton(
-              //     backgroundColor: AppColors.mainColor,
-              //     child: const Icon(Icons.add),
-              //     onPressed: () {
-              //       Navigator.push(
-              //           context,
-              //           MaterialPageRoute(
-              //             builder: (context) => AddEditScreen(null),
-              //           ));
-              //       setState(() {
-              //         selectedWordIndex = null;
-              //       });
-              //     },
-              //   ),
-              // ),
-              // Positioned(
-              //   bottom: 100,
-              //   right: 20,
-              //   child: FloatingActionButton(
-              //     backgroundColor: AppColors.mainColor,
-              //     child: const Icon(Icons.quiz),
-              //     onPressed: () {
-              //       Navigator.pushNamed(
-              //         context,
-              //         RouteNames.quiz,
-              //       );
-              //       setState(() {
-              //         selectedWordIndex = null;
-              //       });
-              //     },
-              //   ),
-              // )
             ],
           ),
         ),
@@ -259,7 +241,7 @@ class _MainScreenState extends State<MainScreen> {
                     style: AppTextStyles.wordText,
                   ),
                   SizedBox(width: 20.w),
-                  Expanded(
+                  Flexible(
                     child: Text(
                       "[ ${wordModel.transcription!} ]",
                       style: AppTextStyles.transcriptText,
@@ -313,27 +295,25 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Container _unSelectedWordItem(WordModel wordModel) {
+  Widget _unSelectedWordItem(WordModel wordModel) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 40.w),
-      child: Expanded(
-        child: Row(
-          children: [
-            Text(
-              wordModel.word!.cupitalizeFirstLetter(),
-              style: AppTextStyles.wordText,
+      child: Row(
+        children: [
+          Text(
+            wordModel.word!.cupitalizeFirstLetter(),
+            style: AppTextStyles.wordText,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(width: 20.w),
+          Flexible(
+            child: Text(
+              "[ ${wordModel.transcription!} ]",
+              style: AppTextStyles.transcriptText,
               overflow: TextOverflow.ellipsis,
             ),
-            SizedBox(width: 20.w),
-            Expanded(
-              child: Text(
-                "[ ${wordModel.transcription!} ]",
-                style: AppTextStyles.transcriptText,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -260,7 +260,7 @@ class _MainScreenState extends State<MainScreen> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: "Definision: ",
+                      text: "Definition: ",
                       style: AppTextStyles.transcriptText
                           .copyWith(fontSize: 32.sp),
                     ),
